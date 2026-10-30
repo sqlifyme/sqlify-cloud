@@ -37,7 +37,6 @@ def render(**props):
     props["domid"] = "query" + str(uuid.uuid4()).split('-')[0]
     return {"props": props}
 ---
-{% if current_user.max_queries >= 0 %}<{HtmxOob}><{FreeQueryUsage}/></{}>{% endif %}
 <div id="{{props.domid}}" class="sqlquery rounded-md bg-base-100 shadow-lg mb-10 border border-neutral-300 dark:border-slate-900 dark:bg-[#282c34]">
   <{QueryForm **props }/>
   <div class="overflow-x-auto">

@@ -14,7 +14,7 @@ def post():
     <div x-show="step==0" class="flex justify-between flex-1 items-center">
         <span><{Icon "question-circle-fill" class="mr-2"}/> SQLIFY uses SQLETL, a variant of SQL with added features to perform queries against any data sources</span>
         <div>
-            <{LinkButton href="/docs" target="_blank" class="btn-ghost btn-sm"}>Read docs</{}>
+            <{Button as="a" href="https://sqlifyme.github.io/sqlify/" target="_blank" class="btn-ghost btn-sm"}>Read docs</{}>
             <button class="btn btn-sm btn-primary" onclick="document.getElementById('tutorial-video').showModal()"><{Icon "play-fill"}/> Watch intro video</button>
             <button class="btn btn-sm btn-primary" @click="step=1">Start tutorial</button>
             <{Button class="btn-sm btn-ghost" hx_post=url_for('Tutorial') hx_target="#tutorial" hx_swap="delete"}>✕</{}>

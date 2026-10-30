@@ -32,5 +32,6 @@ def post():
 
     return {"rows": rows, "columns": columns, "stmt": stmt, "db": sqldb.slug, "query": query, "domid": request.form['domid']}
 ---
-<{HtmxOob target=("#"+props.domid+" form")}><{QueryForm db=props.db domid=props.domid query=props.query stmt=props.stmt columns=props.columns }/></{}>
+{% if current_user.max_queries >= 0 %}<{HtmxOob}><{FreeQueryUsage}/></{}>{% endif %}
+<{HtmxOob target=("#"+props.domid+">form")}><{QueryForm db=props.db domid=props.domid query=props.query stmt=props.stmt columns=props.columns }/></{}>
 <{ResultsTable columns=props.columns rows=props.rows }/>

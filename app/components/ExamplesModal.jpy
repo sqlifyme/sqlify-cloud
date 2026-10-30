@@ -1,10 +1,13 @@
 ---
+from hyperflask import request
+
 def get():
-    pass
+    return {"db": request.args.get("db")}
 ---
-{% macro ExampleQuery() %}
+{% macro ExampleQuery(db=None) %}
     {% set inner = caller() %}
     <form class="flex items-center gap-2 p-2 rounded shadow-sm my-4 border border-gray-300">
+        {% if db %}<input type="hidden" name="db" value="{{db}}">{% endif %}
         <{SQLEditor name="query" class="flex-1"}>{{inner}}</{}>
         <{Button hx_post=url_for("Query", noexec=1) hx_target="#queries" hx_swap="afterbegin" hx_disable="this" hx_on="htmx:after:request -> this.closest('dialog').close()"}><{Icon "play"}/> Run</{Button}>
     </form>
@@ -15,15 +18,15 @@ def get():
         <p>
             Find French cities using the French OpenData service with a population over 100000.
         </p>
-        <{ExampleQuery}>SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE population > 100000 ORDER BY population DESC</{}>
+        <{ExampleQuery db=props.db}>SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE population > 100000 ORDER BY population DESC</{}>
         <p>
             City and population of a French address.
         </p>
-        <{ExampleQuery}>SELECT co.nom, co.population FROM "https://api-adresse.data.gouv.fr/search#features" addr JOIN "https://geo.api.gouv.fr/communes" co ON co."?codePostal" = addr.properties->postcode WHERE addr."?q" = '10 rue de penthievre 75008 paris'</{}>
+        <{ExampleQuery db=props.db}>SELECT co.nom, co.population FROM "https://api-adresse.data.gouv.fr/search#features" addr JOIN "https://geo.api.gouv.fr/communes" co ON co."?codePostal" = addr.properties->postcode WHERE addr."?q" = '10 rue de penthievre 75008 paris'</{}>
         <p>
             Air quality for your location in France based on your address
         </p>
-        <{ExampleQuery}>WITH coords AS (
+        <{ExampleQuery db=props.db}>WITH coords AS (
     SELECT geometry->coordinates->0 lat, geometry->coordinates->1 long
     FROM "https://api-adresse.data.gouv.fr/search#features"
     WHERE ?q = '10 rue de penthievre 75008 paris'

@@ -69,6 +69,6 @@ def render(db, **kwargs):
         </{}>
     </li> -->
     <li>
-        <a href="/docs" target="_blank"><{Icon "question-circle"}/> Help</a>
+        <a href="https://sqlifyme.github.io/sqlify/" target="_blank"><{Icon "question-circle"}/> Help</a>
     </li>
 </ul>

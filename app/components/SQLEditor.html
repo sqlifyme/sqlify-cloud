@@ -1,5 +1,6 @@
-<div {% if props.get('id') %}id="{{props.get('id')}}"{% endif %} x-init="createCodeMirrorEditor($el)" {{html_attrs(class__="self-stretch", **kwargs)}} {% if props.get('name') %}data-hasname="true"{% endif %}>{{caller()}}</div>
-{% if props.get('name') %}<textarea class="hidden" name="{{props.get('name')}}"></textarea>{% endif %}
+{% set name = kwargs.pop('name', None) %}{% set content = caller() %}
+<div {% if props.get('id') %}id="{{props.get('id')}}"{% endif %} x-init="createCodeMirrorEditor($el)" {{html_attrs(class__="self-stretch", **kwargs)}} {% if name %}data-hasname="true"{% endif %}>{{content}}</div>
+{% if name %}<textarea class="hidden" name="{{name}}">{{content}}</textarea>{% endif %}
 
 <script bundle>
   import {EditorView, minimalSetup} from "codemirror"
