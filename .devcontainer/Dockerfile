@@ -1,4 +1,4 @@
-FROM nikolaik/python-nodejs:python3.11-nodejs22
+FROM nikolaik/python-nodejs:python3.14-nodejs24
 
 # Configure apt
 ENV DEBIAN_FRONTEND=noninteractive
@@ -6,10 +6,13 @@ RUN apt-get update \
     && apt-get -y install --no-install-recommends apt-utils 2>&1
 
 # Install git, process tools, lsb-release (common in install instructions for CLIs)
-RUN apt-get -y install git procps lsb-release
+RUN apt-get -y install git procps lsb-release nano
 
 # Install any missing dependencies for enhanced language service
 RUN apt-get install -y libicu[0-9][0-9]
+
+# Install system dependencies required by Playwright browsers (browsers are installed in postCreateCommand)
+RUN npx -y playwright install-deps chromium
 
 RUN mkdir /workspace
 WORKDIR /workspace

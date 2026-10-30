@@ -1,25 +1,27 @@
 {
-  "name": "saas",
+  "name": "{{cookiecutter.project_name}}",
   "dockerComposeFile": "docker-compose.yml",
+  "remoteUser": "pn",
   "service": "app",
-  "forwardPorts": [5000, 7878, 8025],
+  "forwardPorts": [5000, 7878],
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "pip install -r reqs.txt && poetry install && npm install",
+  "postCreateCommand": "uv sync && npm install && uv run playwright install chromium",
   "features": {
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": false
+    }
   },
   "customizations": {
     "vscode": {
       "extensions": [
 				"ms-python.python",
-				"ms-python.vscode-pylance",
-        "VisualStudioExptTeam.vscodeintellicode"
+        "hyperflask.jinjapy-language-support",
+        "hyperflask.sqlorm-language-support"
       ],
       "settings": {
-				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"python.defaultInterpreterPath": "/workspace/.venv/bin/python",
         "python.testing.pytestEnabled": true
 			}
-    },
-    "remoteUser": "vscode"
+    }
   }
 }
