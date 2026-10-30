@@ -142,6 +142,7 @@ Temporary Items
 .venv
 app.db*
 /app/assets/bootstrap-icons
+/app/assets/main.css.expanded.css
 /public/bootstrap-icons
 app/docs
 

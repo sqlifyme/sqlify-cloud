@@ -1,5 +1,5 @@
-<div {% if props.id %}id="{{props.id}}"{% endif %} x-init="createCodeMirrorEditor($el)" {{html_attrs(class__="self-stretch", **kwargs)}} {% if props.name %}data-hasname="true"{% endif %}>{{caller()}}</div>
-{% if props.name %}<textarea class="hidden" name="{{props.name}}"></textarea>{% endif %}
+<div {% if props.get('id') %}id="{{props.get('id')}}"{% endif %} x-init="createCodeMirrorEditor($el)" {{html_attrs(class__="self-stretch", **kwargs)}} {% if props.get('name') %}data-hasname="true"{% endif %}>{{caller()}}</div>
+{% if props.get('name') %}<textarea class="hidden" name="{{props.get('name')}}"></textarea>{% endif %}
 
 <script bundle>
   import {EditorView, minimalSetup} from "codemirror"
@@ -9,7 +9,7 @@
   import {oneDark} from "@codemirror/theme-one-dark"
 
   window.createCodeMirrorEditor = function(el) {
-    const doc = el.innerText.trim();
+    const doc = el.textContent.trim();
     el.innerHTML = "";
     const extensions = [minimalSetup, sql(), EditorView.lineWrapping, placeholder("Type your SQLETL query here...")];
 

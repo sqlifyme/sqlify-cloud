@@ -6,7 +6,7 @@
   import {oneDark} from "@codemirror/theme-one-dark"
 
   window.createCodeMirrorEditor = function(el) {
-    const doc = el.innerText.trim();
+    const doc = el.textContent.trim();
     el.innerHTML = "";
     const extensions = [minimalSetup, sql(), EditorView.lineWrapping, placeholder("Type your SQLETL query here...")];
 

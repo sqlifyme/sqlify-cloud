@@ -12,6 +12,7 @@ def create_app():
         "STRIPE_CHECKOUT_SUCCESS_REDIRECT": "/client",
         "INTEGRATIONS": {},
         "OAUTH_TOKENS_INTEGRATION_ALIAS": {},
+        "CSP_SAFE_SRC": ["'self'", "https://plausible.digicoop.io"],
     })
     factory.db = app.db
     Users(app)

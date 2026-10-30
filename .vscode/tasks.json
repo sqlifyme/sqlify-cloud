@@ -23,7 +23,7 @@
         {
             "label": "Launch scheduler",
             "type": "shell",
-            "command": "hyperflask periodiq",
+            "command": "hyperflask scheduler",
             "isBackground": true
         },
         {

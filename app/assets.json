@@ -16,7 +16,7 @@
   ],
   "app/components/SQLEditor.js": [
     [
-      "/static/dist/app/components/SQLEditor-3IQ532EG.js",
+      "/static/dist/app/components/SQLEditor-CS226LXE.js",
       {
         "modifier": "import"
       }
@@ -30,12 +30,12 @@
   ],
   "hyperflask:static/app.js": [
     [
-      "/static/dist/app.js-JGKMJ3RN.js",
+      "/static/dist/app.js-GNUAKXW4.js",
       {
         "modifier": "import"
       }
     ],
-    "/static/dist/app.js-6HFFAESN.css",
+    "/static/dist/app.js-SYCNX3VR.css",
     [
       "/static/dist/chunk-HTVXZL3C.js",
       {
@@ -43,17 +43,9 @@
       }
     ]
   ],
-  "hyperflask:static/reactive.js": [
-    [
-      "/static/dist/reactive.js-SF4VAFDH.js",
-      {
-        "modifier": "import"
-      }
-    ]
-  ],
   "hyperflask:static/alpine.js": [
     [
-      "/static/dist/alpine.js-XPX5FBMX.js",
+      "/static/dist/alpine.js-MYQLPPGC.js",
       {
         "modifier": "import"
       }

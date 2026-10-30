@@ -7,7 +7,8 @@
     "@codemirror/theme-one-dark": "^6.1.2",
     "codemirror": "^6.0.1",
     "datatables.net-dt": "^2.1.6",
-    "datatables.net-scroller-dt": "^2.4.3"
+    "datatables.net-scroller-dt": "^2.4.3",
+    "htmx-ext-sse": "^2.2.4"
   },
   "devDependencies": {
     "daisyui": "^5.0.35",
