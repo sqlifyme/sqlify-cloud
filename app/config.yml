@@ -1,0 +1,42 @@
+# Secrets (secret_key, passwords, API keys, OAuth client secrets) are loaded
+# from FLASK_* variables in .env (see .env.example)
+
+# server_name: 6f8d-2a02-8428-4f3-3401-e40c-606a-a947-107f.ngrok-free.app
+# preferred_url_scheme: https
+
+sqlify_domain: "localhost:55432"
+
+# recaptcha_site_key: ""
+
+default_sender: "SQLify DEV <contact@sqlify.me>"
+
+plans:
+  free:
+    price: null
+    max_queries: 50
+    max_databases: -1
+    connstr: false
+  standard:
+    price: price_1PtWm0CpAiK4qk8cmPyYRJPt,
+    max_queries: -1
+    max_databases: -1
+    connstr: false
+  premium:
+    price: price_1PskmECpAiK4qk8cFlx5jBKh,
+    max_queries: -1
+    max_databases: -1
+    connstr: true
+
+# -------
+# INTEGRATIONS
+
+airtable_client_id: 5ad0bc15-1f23-4fc4-a363-fb91122f345c
+kantree_client_id: k08jFGf3KcA2zgDXyCnHDmT3
+slack_client_id: "2981422189.7703042110549"
+gsheets_client_id: "824583646152-g3cgoh4kbpjnsgnoe96pstmb9lfapcq5.apps.googleusercontent.com"
+gmail_client_id: "824583646152-g3cgoh4kbpjnsgnoe96pstmb9lfapcq5.apps.googleusercontent.com"
+hubspot_client_id: "9d9ae913-eafb-433e-a57d-544aa2899d8f"
+notion_client_id: "105d872b-594c-802c-83be-0037d2ca65bf"
+asana_client_id: "1208349651509564"
+stripe_client_id: "ca_QsV67gouRbiPuBFHFmQK73KfF8h1HHx1"
+stripe_authorize_url: "https://marketplace.stripe.com/oauth/v2/channellink*AZIKZ6zN7AAAAAR3%23EhcKFWFjY3RfMTZuclhSQ3BBaUs0cWs4Yw/authorize"

@@ -1,0 +1,29 @@
+[project]
+name = "sqlify-cloud"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "hyperflask~=0.2",
+    "hyperflask-users~=0.2",
+    "flask-stripe-checkout~=0.1",
+    "psycopg[binary]~=3.2",
+    "authlib~=1.3",
+    "brevo_python~=1.1",
+    "pycryptodome>=3.23.0",
+]
+
+[tool.uv.sources]
+hyperflask = { path = "/home/maxime/Projets/hyperflask/hyperflask", editable = true }
+hyperflask-users = { path = "/home/maxime/Projets/hyperflask/hyperflask-users", editable = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
+    "pytest-flask>=1.3.0",
+    "ruff>=0.12.4",
+    "mkdocs-material>=9.5.35",
+    "mkdocs-callouts>=1.14.0"
+]

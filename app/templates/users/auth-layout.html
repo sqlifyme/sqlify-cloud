@@ -1,0 +1,113 @@
+{% use_layout %}
+
+<div class="flex w-full h-screen">
+  <aside id="sidebar" class="flex flex-col min-h-screen bg-zinc-200 border-r border-zinc-300 dark:bg-slate-800 dark:border-slate-900">
+      <div class="p-4">
+          <h3 class="font-bold"><img src="{{static_url('icon.png')}}" width="20" height="20" class="inline rounded-md mr-1"> SQLify</h3>
+      </div>
+      <div class="flex-1 flex flex-col w-52">
+        <ul class="menu">
+          <li>
+              <h2 class="menu-title">Databases</h2>
+              <ul>
+                  <li>
+                      <button><{Icon "database"}/> My database</button>
+                  </li>
+                  <li>
+                      <button><{Icon "database-add" }/> New database</button>
+                  </li>
+              </ul>
+          </li>
+          <li>
+              <h2 class="menu-title">Integrations</h2>
+              <ul>
+                  <li>
+                    <button>Airtable</button>
+                  </li>
+                  <li>
+                    <button>Google Sheet</button>
+                  </li>
+              </ul>
+          </li>
+        </ul>
+      </div>
+  </aside>
+  <div id="notebook" class="flex-1 flex flex-col bg-zinc-100 h-screen max-h-screen dark:bg-slate-800 overflow-hidden">
+    <div class="flex-auto flex h-screen overflow-hidden">
+      <aside id="notebook-aside" class="flex flex-col w-64 min-w-64 bg-zinc-300 dark:bg-slate-900 dark:border-0 overflow-y-auto">
+        <h3 class="flex items-center p-4 px-6 font-bold">
+          <div class="grow">My database</div>
+        </h3>
+        <ul id="notebook-nav" class="flex-auto menu py-4">
+          <li>
+              <details open>
+                  <summary class="font-bold">Tables</summary>
+                  <ul>
+                      <li>
+                          <details open>
+                              <summary><a>Table 1</a></summary>
+                              <ul>
+                                <li><span class="px-3 py-1">Column 1</span></li>
+                                <li><span class="px-3 py-1">Column 2</span></li>
+                              </ul>
+                          </details>
+                      </li>
+                  </ul>
+              </details>
+          </li>
+        </ul>
+      </aside>
+      <div class="flex-auto flex flex-col overflow-hidden">
+        <div class="flex justify-center p-3 gap-2 h-32 border-b border-neutral-300 bg-white dark:bg-[#282c34]">
+          <{SQLEditor name="query" class="flex-1"}>SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE "?codePostal" = 75001</{}>
+          <{Button class="h-full px-10" style="neutral"}><{Icon "play"}/> Run</{Button}>
+        </div>
+        <div id="queries" class="overflow-y-auto p-5">
+          <div class="sqlquery rounded-md bg-base-100 shadow-lg mb-10 pb-2 border border-neutral-300 dark:border-slate-900 dark:bg-[#282c34]">
+            <div class="flex items-center">
+              <{SQLEditor name="query" class="flex-1 rounded-tl-md"}>SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE "?codePostal" = 75001</{}>
+              <div class="flex flex-col gap-2 p-1">
+                <{Button size="sm" title="Execute"}><{Icon "arrow-clockwise" }/></{}>
+                <{Button size="sm" title="Explain"}><{Icon "question-circle-fill" }/></{}>
+                <{Button size="sm" title="Delete"}><{Icon "trash" }/></{}>
+              </div>
+            </div>
+            <table class="table table-xs">
+              <thead>
+                <tr class="bg-base-300">
+                  <th>nom</th>
+                  <th>population</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    <td>Paris</td>
+                    <td>2133111</td>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<{Modal x_init="$el.showModal()" no_blur=True}>
+  <div class="mb-4">{% block auth_header %}{% endblock %}</div>
+  <div class="mb-4">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div role="alert" class="alert alert-error">
+      <{Icon "exclamation-triangle-fill" }/>
+      <span>{{ messages[0] }}</span>
+    </div>
+    {% endif %}
+    {% endwith %}
+  </div>
+  {% block auth_content %}{% endblock %}
+</{Modal}>
+
+{% if config.get("RECAPTCHA_SITE_KEY") %}
+{% include "auth/recaptcha.html" %}
+{% endif %}

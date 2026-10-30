@@ -1,0 +1,18 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col items-center justify-center bg-primary text-white">
+  <div class="flex items-center gap-20 text-4xl font-bold mb-20">
+    <img src="{{static_url('logo.png')}}" width="200">
+    <{Icon "plus"}/>
+    <img src="{% block logo_url %}{% endblock %}" width="200">
+  </div>
+  <div class="text-4xl text-neutral-300 text-center max-w-screen-lg leading-relaxed">
+    <p>{% block tagline %}{% endblock %}</p>
+    <p class="text-lg">No synchronization required.</p>
+  </div>
+  <div class="py-10">
+    {% block actions %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

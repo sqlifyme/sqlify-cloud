@@ -1,0 +1,96 @@
+---
+from app.models import Database
+
+page.login_required()
+page.databases = Database.find_all_for_current_user(Database.integration==None).all()
+page.integrations = Database.find_all_for_current_user(Database.integration!=None).all()
+---
+{% use_layout %}
+
+{{include_asset("app/components/ResultsTable.js")}}
+{{include_asset("app/components/ResultsTable.css")}}
+
+<div class="sm:hidden absolute top-0 left-0 w-screen h-screen bg-primary text-white flex flex-col justify-center items-center gap-3 text-center z-50 p-3">
+<img src="{{static_url('logo.png')}}" width="100" height="100">
+<p class="text-xl">SQLify is not yet compatible with mobile clients</p>
+<p>Please try again on a desktop computer. A mobile experience is being worked on.</p>
+</div>
+<div class="flex w-full h-screen">
+    <aside id="sidebar" class="flex flex-col min-h-screen bg-zinc-200 border-r border-zinc-300 dark:bg-slate-800 dark:border-slate-900 dark:text-white">
+        <div class="p-5">
+            <h3 class="font-bold"><img src="{{static_url('icon.png')}}" width="20" height="20" class="inline rounded-md mr-1"> SQLify <span class="badge badge-error ml-2">BETA</span></h3>
+        </div>
+        <div class="flex-1 flex flex-col w-52">
+            <ul class="menu">
+                <li>
+                    <h2 class="menu-title">Databases</h2>
+                    <ul>
+                        {% for db in databases %}
+                        <li>
+                            <{button hx_get=url_for('Notebook', db=db.slug) hx_target="#notebook" hx_disabled_elt="#sidebar button" hx_push_url=url_for('client', db=db.slug)}>
+                                <{Icon "database"}/> {{db.name}}
+                            </{}>
+                        </li>
+                        {% endfor %}
+                        <li>
+                            <{button hf_modal=url_for('CreateDatabaseModal')}>
+                                <{Icon "database-add" }/> New database
+                            </{}>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h2 class="menu-title">Integrations</h2>
+                    <ul>
+                        {% for db in integrations %}
+                        <li>
+                            <{button hx_get=url_for('Notebook', db=db.slug) hx_target="#notebook" hx_disabled_elt="#sidebar button" hx_push_url=url_for('client', db=db.slug) title=db.name}>
+                                <span class="overflow-hidden text-nowrap">
+                                    <img src="{{static_url(config["INTEGRATIONS"][db.integration]["icon"])}}" alt="{{config["INTEGRATIONS"][db.integration]["title"]}}" width=20 height=20 class="rounded me-1 inline">
+                                    {{db.name}}
+                                </span>
+                            </{}>
+                        </li>
+                        {% endfor %}
+                        <li>
+                            <{button hf_modal=url_for('ConnectIntegrationModal', with_hidden=request.args.get('hidden_integration'))}>
+                                <{Icon "plug" }/> Connect
+                            </{}>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="grow"></div>
+            <div class="bg-sky-200 rounded-xl border-2 border-sky-400 m-4 p-2 dark:text-black dark:bg-slate-700 dark:border-slate-600">
+                <p class="mb-4">
+                    SQLify is in BETA and we need you to make it great! <strong>Join the community now</strong>
+                </p>
+                <a class="link block" href="https://discord.gg/ycXUsWW4G2"><{Icon "discord"}/> Discord</a>
+                <a class="link block" href="https://twitter.com/SQLify_me"><{Icon "twitter-x"}/> X.com</a>
+                <a class="link block" href="https://youtube.com/@sqlify_me"><{Icon "youtube"}/> Youtube</a>
+            </div>
+            <ul class="menu">
+                <li><{button hf_modal=url_for('AccountModal')}><{Icon "person-circle"}/> My account</{}></li>
+                <li><a href="{{url_for('users.logout')}}"><{Icon "door-closed-fill"}/> Logout</a></li>
+            </ul>
+        </div>
+    </aside>
+    <div id="notebook" class="flex-1 flex flex-col bg-zinc-100 h-screen max-h-screen dark:bg-slate-800 dark:text-white overflow-hidden">
+        {% if databases or integrations %}
+            <{Notebook db=request.args.get('db', '')}/>
+        {% else %}
+            {{include_asset("@hyperflask/alpine")}}
+            <div class="flex-1 flex items-center justify-center">
+                <div class="text-center text-neutral-700 dark:text-neutral-300">
+                    <p class="text-lg mb-6">Start by creating a database or connecting to an app</p>
+                    <{Button hf_modal=url_for('CreateDatabaseModal') class="btn-primary"}>
+                        <{Icon "database-add" }/> Create an empty database
+                    </{}>
+                    <{Button hf_modal=url_for('ConnectIntegrationModal') class="btn-primary"}>
+                        <{Icon "plug" }/> Connect to an app
+                    </{}>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@source "/home/maxime/Projets/hyperflask/hyperflask/src/hyperflask/ui";
+@source "/home/maxime/Projets/hyperflask/hyperflask-users/src/hyperflask_users/templates";
+@plugin "daisyui";
+@plugin "@tailwindcss/typography";
+
+.auth-form {
+  .input,
+  .select,
+  .textarea {
+    width: 100%;
+  }
+}

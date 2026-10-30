@@ -1,0 +1,42 @@
+{
+  "id": "com.digicoop.sqlify",
+  "version": "0.0.1",
+  "name": "SQLify",
+  "icon": "./icon.png",
+  "permissions": [
+    {
+      "permission": "charge_read",
+      "purpose": "Query charges information"
+    },
+    {
+      "permission": "customer_read",
+      "purpose": "Query customer information"
+    },
+    {
+      "permission": "dispute_read",
+      "purpose": "Query dispute information"
+    },
+    {
+      "permission": "invoice_read",
+      "purpose": "Query invoice information"
+    },
+    {
+      "permission": "product_read",
+      "purpose": "Query product information"
+    },
+    {
+      "permission": "subscription_read",
+      "purpose": "Query subscription information"
+    },
+    {
+      "permission": "user_email_read",
+      "purpose": "Identify the user"
+    }
+  ],
+  "allowed_redirect_uris": [
+    "https://sqlify.me/stripe/login/callback",
+    "https://6f8d-2a02-8428-4f3-3401-e40c-606a-a947-107f.ngrok-free.app/stripe/login/callback"
+  ],
+  "stripe_api_access_type": "oauth",
+  "distribution_type": "public"
+}

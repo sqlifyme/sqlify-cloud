@@ -1,0 +1,30 @@
+---
+from hyperflask import request, redirect, abort, url_for, current_app
+from hyperflask_users import current_user, login_required
+from app.models import db, Database
+
+@login_required
+def get():
+    if not current_user.can_create_database:
+        return current_app.macros.UpgradeModal()
+
+---
+<{Modal close_btn=True}>
+    <{ModalTitle}>Integrations</{}>
+    <p class="mb-5 text-gray-500">
+        Connect all your apps and turn them into a single database
+    </p>
+    {% for name, integration in config["INTEGRATIONS"].items() %}
+    {% if request.args.get('with_hidden') or not integration.get('hidden') %}
+    <div class="flex justify-between items-center my-5">
+        <img src="{{static_url(integration["icon"])}}" width="40" height="40" class="rounded me-4">
+        <a href="{{integration["url"]}}" target="_blank">{{integration["title"]}}</a>
+        <{Button as="a" href=integration["setup_url"] class="ms-auto"}>Connect</{}>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <p class="text-sm mt-5 text-gray-500">
+        We are still working on many more integrations. In the meantime,
+        <a href="/docs/integrations#custom" target="_blank" class="link">you can create your own integrations!</a>
+    </p>
+</{}>

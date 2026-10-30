@@ -1,0 +1,13 @@
+<{AutoOpenModal close_btn=True width="w-11/12 max-w-4xl" responsive=False}>
+  <{ModalTitle}>Gmail integration help</{}>
+  <div class="prose max-w-none">
+    <p>Labels are mapped to tables</p>
+    <p>When querying a table, "date", "from", "to" and "subject" are returned.</p>
+    <pre><code>SELECT * FROM YourLabel</code></pre>
+    <pre><code>SELECT * FROM YourLabel WHERE "From" like '%somebody@example.com%'</code></pre>
+    <p>Use the special <code>threads</code> view to retrieve a list of messages:</p>
+    <pre><code>SELECT * FROM threads WHERE "?id" = 'threadId'</code></pre>
+    <p>Use the special <code>messages</code> view to search across all your messages:</p>
+    <pre><code>SELECT * FROM messages WHERE "?q" = 'your gmail search query'</code></pre>
+  </div>
+</{}>

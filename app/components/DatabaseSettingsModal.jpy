@@ -1,0 +1,48 @@
+---
+from hyperflask import request, redirect, abort, url_for, htmx_redirect, current_app
+from hyperflask_users import current_user, login_required
+from app.models import db, Database
+from app import sqlify
+
+@login_required
+def get():
+    sqldb = Database.find_one_for_current_user_or_404(slug=request.args['db'])
+    return {"db": sqldb}
+
+@login_required
+def post():
+    sqldb = Database.find_one_for_current_user_or_404(slug=request.values['db'])
+
+    if request.values.get('delete'):
+        sqldb.drop_database()
+        with db:
+            sqldb.delete()
+            return htmx_redirect(url_for('client'))
+
+    if request.values.get('refresh'):
+        sqlify.query("REFRESH SCHEMA", sqldb.slug, current_user.db_role)
+    else:
+        with db:
+            sqldb.name = request.form['name']
+            sqldb.save()
+    return htmx_redirect(url_for('client', db=sqldb.slug))
+---
+<{Modal close_btn=True}>
+    <{ModalTitle}>Database settings</{}>
+    <{ModalForm class="form-w-full"}>
+        <input type="hidden" name="db" value="{{props.db.slug}}">
+        <{FormField label="Name"}>
+            <{Input name="name" required=True value=props.db.name}/>
+        </{}>
+        {% if props.db.integration %}
+        <{FormField label="Init script"}>
+            <{Textarea readonly=True rows=4}>{{props.db.init_script}}</{}>
+        </{}>
+        {% endif %}
+        <div class="modal-action">
+            <{Button type="button" class="btn-error mr-auto" hx_confirm="Are you sure?" hx_post=url_for('DatabaseSettingsModal', delete=1)}><{Icon "trash"}/> Delete</{Button}>
+            {% if props.db.integration %}<{Button type="button" hx_post=url_for('DatabaseSettingsModal', refresh=1) hx_target="closest .modal" hx_swap="delete" onclick="this.disabled=true"}>Refresh schema</{Button}>{% endif %}
+            <{Button style="primary" type="submit" hx_post=url_for('DatabaseSettingsModal') hx_target="closest .modal" hx_swap="delete"}>Save</{Button}>
+        </div>
+    </{}>
+</{}>

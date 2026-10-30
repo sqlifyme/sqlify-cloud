@@ -1,0 +1,19 @@
+---
+from hyperflask import request
+from hyperflask_users import current_user
+from app.models import db
+
+def post():
+    with db:
+        current_user.first_integration_completed = True
+        current_user.save()
+    return ""
+---
+<div class="alert bg-info text-black flex justify-between items-center mb-5">
+    <span class="text-lg mr-auto"><{Icon "plug-fill" class="mr-2"}/> Connect your first integration to query and join data from all your apps</span>
+    <div>
+        {% for inte in config["INTEGRATIONS"].values() %}{% if not inte.get('hidden') %}<img src="{{static_url(inte['icon'])}}" width="20" height="20" class="inline mr-3">{% endif %}{% endfor %}
+        <{Button class="btn-primary btn-sm" hf_modal=url_for('ConnectIntegrationModal', with_hidden=request.args.get('hidden_integration'))}><{Icon "plug" }/> Connect</{}>
+        <{Button class="btn-ghost btn-sm" hx_post=url_for('ConnectBanner') hx_target="closest .alert" hx_swap="delete"}>✕</{}>
+    </div>
+</div>

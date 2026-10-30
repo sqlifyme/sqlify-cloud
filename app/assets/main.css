@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "@tailwindcss/typography";
+
+.auth-form {
+  .input,
+  .select,
+  .textarea {
+    width: 100%;
+  }
+}

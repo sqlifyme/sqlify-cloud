@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <style bx:fonts="Ubuntu">@import url(https://fonts.googleapis.com/css2?family=Ubuntu%3Aital%2Cwght%400%2C300%3B0%2C400%3B0%2C500%3B0%2C700%3B1%2C300%3B1%2C400%3B1%2C500%3B1%2C700&amp;display=swap);</style>
+  </defs>
+  <path style="stroke: rgb(0, 0, 0); stroke-width: 0px; fill: rgb(250, 191, 8);" d="M 290.068 51.354 L 222.912 143.341 C 222.912 143.341 284.989 154.628 284.424 154.628 C 283.859 154.628 205.418 265.237 205.418 265.237 L 357.788 130.362 L 293.454 121.332 L 339.729 71.67 L 290.068 51.354 Z" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)"/>
+  <text style="font-family: Ubuntu; font-size: 87px; white-space: pre;" x="85.214" y="174.943" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 0)">SQLify</text>
+</svg>

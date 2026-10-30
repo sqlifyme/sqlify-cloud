@@ -1,0 +1,17 @@
+{
+  "template": "https://github.com/hyperflask/hyperflask-start",
+  "commit": "c1c719ffec41706e22820e2535e943db77616d99",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "project_name": "saas",
+      "project_slug": "saas",
+      "description": "Web app created using Hyperflask",
+      "domain_name": "portaldb.com",
+      "email": "contact@portaldb.com",
+      "version": "0.1.0",
+      "_template": "https://github.com/hyperflask/hyperflask-start"
+    }
+  },
+  "directory": null
+}

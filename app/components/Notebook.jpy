@@ -1,0 +1,93 @@
+---
+from hyperflask import request
+from hyperflask_users import current_user
+from app.models import Database, NotebookQuery
+from app.sqlify import get_connection_string
+
+def get():
+  return {"db": request.args.get('db')}
+
+def render(db):
+  sqldb = Database.find_for_current_user_or_404(db)
+  queries = NotebookQuery.find_all(database_id=sqldb.id, order_by="id desc").all()
+  return {"db": sqldb, "queries": queries, "connstr": get_connection_string(current_user, sqldb.slug)}
+---
+<div class="flex-auto flex h-screen overflow-hidden">
+  <aside id="notebook-aside" class="flex flex-col w-64 min-w-64 bg-zinc-300 dark:bg-slate-900 dark:border-0 overflow-y-auto hidden md:block">
+    <h3 class="flex items-center p-4 pt-2 font-bold">
+        {% if db.integration %}<img src="{{static_url(config["INTEGRATIONS"][db.integration]["icon"])}}" alt="{{config["INTEGRATIONS"][db.integration]["title"]}}" width=20 height=20 class="rounded me-3">{% endif %}
+        <div class="grow">{{db.name}}</div>
+        <{Button class="btn-ghost" hf_modal=url_for('DatabaseSettingsModal', db=db.slug)}><{Icon "sliders"}/></{}>
+    </h3>
+    <{div id="notebook-nav" hx_get=url_for('NotebookNav', db=db.slug) hx_trigger="load" hx_swap="outerHTML" class="text-center py-10 text-neutral-400"}>
+      <{Loading}/>
+    </{div}>
+  </aside>
+  <div class="flex-auto flex flex-col overflow-hidden">
+    <div class="border-b border-neutral-300 flex items-center p-3 gap-3 dark:text-slate-300 dark:bg-slate-800 dark:border-slate-900">
+      {% if current_user.db_password %}
+        Database URI: <code class="py-1 px-3 border rounded border-neutral-200 dark:border-neutral-500">{{connstr}}</code>
+        <{Button hf_modal=url_for('DatabaseConnectionModal', db=db.slug) class="btn-ghost btn-sm"}><{Icon "database-fill-gear"}/></{}>
+      {% else %}
+        <{Button as="a" hf_modal=url_for('UpgradeModal') class="btn-sm btn-primary"}><{Icon "rocket"}/> Upgrade now</{}>
+        <div class="flex-1">
+            Upgrade now to connect from anywhere using PostgreSQL !
+        </div>
+      {% endif %}
+      {% if current_user.max_queries >= 0 %}<{FreeQueryUsage }/>{% endif %}
+    </div>
+    <div class="p-3 border-b border-neutral-300 bg-white dark:bg-[#282c34] dark:border-slate-900">
+      <{form class="flex justify-center gap-2 h-24"}>
+        <input type="hidden" name="db" value="{{db.slug}}">
+        <div class="flex-1 flex flex-col">
+          <{SQLEditor id="notebook-query" name="query" class="flex-1"}>{% if not queries %}{% if db.suggestion %}{{db.suggestion}}{% else %}SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE "?codePostal" = 75001{% endif %}{% endif %}</{}>
+          <div class="flex gap-5 px-1 text-sm mt-3">
+            <!-- <{Link class="text-gray-400" hf_modal=url_for('ExploreModal')}><{Icon "signpost-2" }/> Explore APIs</{}> -->
+            <{Link hf_modal=url_for('CheatsheetModal') class="text-gray-400" }><{Icon "question-circle" }/> SQLETL cheatsheet</{}>
+            <{Link hf_modal=url_for('ExamplesModal') class="text-gray-400" }><{Icon "magic" }/> SQLETL examples</{}>
+            <{Link hx_post=url_for("Query", explain=1) hx_target="#queries" hx_swap="afterbegin" hx_disabled_elt="this" class="text-gray-400" }><{Icon "gear-wide-connected" }/> Explain query</{}>
+            {% if db.integration and config["INTEGRATIONS"][db.integration].get("help_url") %}
+            <{Link hf_modal=config["INTEGRATIONS"][db.integration]['help_url'] class="text-gray-400" }><{Icon "question-circle" }/> {{config["INTEGRATIONS"][db.integration]['title']}} integration help</{}>
+            {% endif %}
+          </div>
+        </div>
+        <{Button type="submit" class="btn-neutral px-10 h-full" hx_post=url_for("Query") hx_target="#queries" hx_swap="afterbegin" hx_disabled_elt="this"}><{Icon "play"}/> Run</{Button}>
+      </{}>
+    </div>
+    <div class="overflow-y-auto overflow-x-hidden p-5">
+      {% if not current_user.tutorial_completed %}
+        <{Tutorial db=db.slug}/>
+      {% endif %}
+      {% if not current_user.first_integration_completed %}
+        <{ConnectBanner }/>
+      {% endif %}
+      <div id="queries">
+      {% if queries %}
+        <div class="divider"><span class="text-neutral-400 text-sm">Previous queries</span></div>
+        {% for query in queries %}
+          <{Query db=db.slug query=query stmt=query.stmt }/>
+        {% endfor %}
+      {% endif %}
+      </div>
+      <div class="text-gray-500 text-center mt-10 mx-auto max-w-screen-lg">
+        <div class="text-lg font-bold mb-4">SQLIFY is compatible with PostgreSQL and can be used from any PostgreSQL compatible client !</div>
+        {% if not current_user.db_password %}
+        <p>
+          <{Link hf_modal=url_for('UpgradeModal')}>Upgrade now</{}> to obtain a PostgreSQL connection string to access your SQLIFY databases from anywhere.
+        </p>
+        {% else %}
+        <p>
+          Use the PosgreSQL connection string at the top to access your SQLIFY databases from anywhere.
+        </p>
+        {% endif %}
+        <p>
+          Here is a selection of apps from which you can use SQLIFY:
+        </p>
+        <div class="flex gap-20 mt-12 align-items justify-center">
+          <a href="https://www.microsoft.com/fr-fr/power-platform/products/power-bi" target="_blank" title="PowerBI"><img src="{{static_url('images/powerbi.webp')}}" alt="PowerBI" width="150"></a>
+          <a href="https://jupyter.org/" target="_blank" title="Jupyter Notebook"><img src="{{static_url('images/jupyter.png')}}" alt="Jupyter Notebook" width="150"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

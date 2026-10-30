@@ -1,0 +1,99 @@
+---
+from hyperflask import request
+from hyperflask_users import current_user
+from app.models import db
+
+def post():
+    with db:
+        current_user.tutorial_completed = True
+        current_user.save()
+        current_user.update_brevo()
+    return ""
+---
+<div id="tutorial" x-data="{step: 0}" class="alert bg-info text-black flex mb-5">
+    <div x-show="step==0" class="flex justify-between flex-1 items-center">
+        <span><{Icon "question-circle-fill" class="mr-2"}/> SQLIFY uses SQLETL, a variant of SQL with added features to perform queries against any data sources</span>
+        <div>
+            <{LinkButton href="/docs" target="_blank" class="btn-ghost btn-sm"}>Read docs</{}>
+            <button class="btn btn-sm btn-primary" onclick="document.getElementById('tutorial-video').showModal()"><{Icon "play-fill"}/> Watch intro video</button>
+            <button class="btn btn-sm btn-primary" @click="step=1">Start tutorial</button>
+            <{Button class="btn-sm btn-ghost" hx_post=url_for('Tutorial') hx_target="#tutorial" hx_swap="delete"}>✕</{}>
+        </div>
+        <dialog id="tutorial-video" class="modal">
+            <div class="modal-box w-9/12 aspect-video p-0 max-w-none">
+                <iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/nfMXSioijxo?si=vqRkXd3rYgjWqapX" title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <form method="dialog" class="modal-backdrop">
+                <button>close</button>
+            </form>
+        </dialog>
+    </div>
+    <div x-show="step==1" class="prose flex-1 max-w-full">
+        <p>
+            SQLETL is a superset of SQL that allows you to query many network accessible data sources (HTTP APIs, other databases, CSV files, ...)
+        </p>
+        <p>
+            Let's start with an example:
+        </p>
+        <{TutorialQuery query="step1.1"}/>
+        <p>
+            Here we are:
+            <ol>
+                <li>Querying the URL <a href="https://geo.api.gouv.fr/communes">https://geo.api.gouv.fr/communes</a> using a query parameter "codePostal". This endpoint returns JSON data</li>
+                <li>Filtering the data on the "population" property</li>
+                <li>Only returning the "nom" and "population" properties</li>
+            </ol>
+        </p>
+        <p>
+            When building your WHERE clause, query parameters must be prefixed by a question mark.<br>
+            It is important to note that a single SQLETL query may perform multiple queries to retrieve needed data.
+            For example when using OR conditions with query parameters:
+        </p>
+        <{TutorialQuery query="step1.2"}/>
+        <p>
+            The "EXPLAIN" command is available and will show the ETL pipeline to be executed.
+            <{a href="#" hx_post=url_for('TutorialQuery', query="step1.2", explain=1) hx_target="body" hx_swap="beforeend"}>See last example plan</{}>
+        </p>
+        <div class="flex justify-between align-items mt-6">
+            <a href="/docs/select" target="_blank">Read more on how to query different data sources</a>
+            <button @click="step=2" class="btn btn-primary">Next <{Icon "arrow-right-circle-fill"}/></button>
+        </div>
+    </div>
+    <div x-show="step==2" class="prose flex-1 max-w-full">
+        <p>
+            When querying various APIs, you will most likely need to transform their response.
+        </p>
+        <p>
+            Use the URL fragment to extract a portion of the response as the results.
+        </p>
+        <{TutorialQuery query="step2.1"}/>
+        <p>
+            Use the <code>EXPAND</code> function to expand a hash into fields.
+        </p>
+        <{TutorialQuery query="step2.2"}/>
+        <p>
+            Use the <code>UNNEST</code> function to transform a sub array to rows
+        </p>
+        <{TutorialQuery query="step2.3"}/>
+        <div class="flex justify-between align-items mt-6">
+            <a href="/docs/select#processing-the-response" target="_blank">Read more on SQLETL transformation capabilities</a>
+            <button @click="step=3" class="btn btn-primary">Next <{Icon "arrow-right-circle-fill"}/></button>
+        </div>
+    </div>
+    <div x-show="step==3" class="prose flex-1 max-w-full">
+        <p>
+            Finally, you can use the power of SQL to JOIN, use WINDOW functions and more.
+        </p>
+        <{TutorialQuery query="step3.1"}/>
+        <p>
+            CTEs are supported. They are usefull when you need to process a result in multiple setps.
+        </p>
+        <{TutorialQuery query="step3.2"}/>
+        <div class="flex justify-between align-items mt-6">
+            <a href="/docs" target="_blank">SQLETL full reference</a>
+            <{Button hx_post=url_for('Tutorial') hx_target="#tutorial" hx_swap="delete" style="primary"}>Finish</{}>
+        </div>
+    </div>
+</div>

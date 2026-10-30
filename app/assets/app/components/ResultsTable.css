@@ -1,0 +1,17 @@
+
+  html[data-theme="dark"] {
+    div.dts div.dt-scroll-body table,
+    div.dts div.dataTables_scrollBody table {
+      background-color: #282c34;
+    }
+  }
+  div.dt-container div.dt-layout-row {
+    margin: 0;
+  }
+  div.dt-container div.dt-layout-row:first-child {
+    display: none;
+  }
+  div.dt-container div.dt-layout-row:not(.dt-layout-table) .dt-layout-cell {
+    padding: .5rem;
+    font-size: .7rem;
+  }

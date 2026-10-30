@@ -1,0 +1,10 @@
+{% extends "layouts/base.html" %}
+
+{% block body %}
+  <{Navbar style="neutral" title="Sqlify" class="mb-10"}>
+    <{LinkButton href=url_for('index')}>Back to site</{}>
+  </{}>
+  <div class="prose mx-auto max-w-screen-lg">
+    {% block content %}{% endblock %}
+  </div>
+{% endblock %}

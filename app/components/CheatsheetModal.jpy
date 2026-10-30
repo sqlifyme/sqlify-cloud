@@ -1,0 +1,154 @@
+---
+def get():
+  pass
+---
+<{Modal close_btn=True width="w-11/12 max-w-4xl" responsive=False}>
+  <{ModalTitle}>
+    SQLETL Cheatsheet
+  </{}>
+  <p>
+    Check out the <{Link href="/docs" target="_blank"}>full SQLETL reference</{}>
+  </p>
+  <div role="tablist" class="tabs tabs-lifted mb-2 mt-6">
+    <input type="radio" name="cheatsheet_tabs" role="tab" class="tab" aria-label="Basics" checked >
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 prose max-w-none">
+      <p>Query an HTTP endpoint with parameters:</p>
+      <pre><code>SELECT * FROM "http://example.com/path" WHERE ?param = 'value'</code></pre>
+      <pre><code>SELECT * FROM "postgresql://user:password@host/dbname#table"</code></pre>
+      <p>Parameters and conditions on columns can be combined:</p>
+      <pre><code>SELECT * FROM "http://example.com/path" WHERE ?param = 'value' AND col = 'value'</code></pre>
+      <p>Using OR expressions with query parameters will result in multiple queries being performed</p>
+      <p>Use only a subset of the response as data:</p>
+      <pre><code>SELECT * FROM "http://example.com/path#json_path" WHERE ?param = 'value'</code></pre>
+      <p>Expand a field (object) into multiple columns</p>
+      <pre><code>SELECT col1, EXPAND(col2) FROM "http://example.com/path" WHERE ?param = 'value'</code></pre>
+      <p>Expand a field (array of objects) into multiple rows</p>
+      <pre><code>SELECT UNNEST(col2) FROM "http://example.com/path" WHERE ?param = 'value'</code></pre>
+      <p>You can use CTEs, JOIN, GROUP BY and WINDOW functions</p>
+    </div>
+    <input type="radio" name="cheatsheet_tabs" role="tab" class="tab" aria-label="Protocols" />
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 prose max-w-none">
+      <h3>HTTP/HTTPS</h3>
+      <p>
+        Must return a supported data format.
+      </p>
+      <pre><code>SELECT * FROM "http://example.com/path/to/rest/endpoint"</code></pre>
+      <pre><code>SELECT * FROM "http://example.com/path/file.csv"</code></pre>
+      <p>
+        Use HTTP auth for authentication <code>https://username:password@example.com</code><br>
+        You can also provide bearer tokens: <code>https://token@example.com</code>.
+      </p>
+      <h3>S3</h3>
+      <p>Query files located on S3 buckets (pay attention to the triple slashes).</p>
+      <pre><code>SELECT * FROM "s3:///bucket-name/file.csv"</code></pre>
+      <p>Private buckets require authentication:</p>
+      <pre><code>SELECT * FROM "s3://aws_key:aws_secret@/bucket-name/file.csv"</code></pre>
+      <p>In some cases, you may need to specify the region:</p>
+      <pre><code>SELECT * FROM "s3:///bucket-name/file.csv?region_name=us-east-1"</code></pre>
+      <p>You can also use any S3 compatible service:</p>
+      <pre><code>SELECT * FROM "s3://other-service.com/bucket-name/file.csv"</code></pre>
+      <h3>PostgreSQL</h3>
+      <p>Query any accessible PostgreSQL database</p>
+      <pre><code>SELECT * FROM "postgresql://username:password@example.com/database#table"</code></pre>
+      <p>If you use query parameters, they will be used in the WHERE clause of the SELECT statement used to query the database.</p>
+      <h3>Mysql</h3>
+      <p>Query any accessible MySQL database</p>
+      <pre><code>SELECT * FROM "mysql://username:password@example.com/database#table"</code></pre>
+      <h3>FTP</h3>
+      <p>Query files (in supported data formats) located on ftp servers</p>
+      <pre><code>SELECT * FROM "ftp://username:password@example.com/file.csv"</code></pre>
+    </div>
+    <input type="radio" name="cheatsheet_tabs" role="tab" class="tab" aria-label="Formats" />
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 prose max-w-none">
+      <h3>Format detection</h3>
+      <p>
+        Format is auto-detected using (in order): Content-Type header, file extension.<br>
+        Format can be forced via the URI scheme: "scheme+format://". Example: "http+csv://...", "s3+parquet://..."
+      </p>
+      <h3>JSON</h3>
+      <p>
+        Any JSON file. Should contain either an array of objects (to return multiple rows) or a single object (returns a single row).<br>
+        Combine with JSON path in the URI to select a specific path.
+      </p>
+      <h3>CSV & XLSX</h3>
+      <p>
+        Query any CSV or XLSX files.
+      </p>
+      <p>
+        You can provide options via fragment of the URI to parse the CSV.<br>
+        <ul>
+          <li>`header`: set to 0 to not use the first row as column names</li>
+          <li>`delimiter`: which delimiter to use (defaults to `,`)</li>
+          <li>`quote`: quotation to use (defaults to `"`)</li>
+        </ul>
+      </p>
+      <pre><code>SELECT * FROM "http://example.com/file.csv#header=0&delimiter=;"</code></pre>
+      <h3>Parquet</h3>
+      <p>Query any Parquet file<p>
+      <pre><code>SELECT * FROM "http://example.com/file.parquet"</code></pre>
+      <h3>SQLite</h3>
+      <p>Query any SQLite file<p>
+      <pre><code>SELECT * FROM "http://example.com/file.sqlite#table"</code></pre>
+    </div>
+    <input type="radio" name="cheatsheet_tabs" role="tab" class="tab" aria-label="Credentials" />
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 prose max-w-none">
+      <p>Credentials can be centrally managed instead of being provided for each query</p>
+      <h3>Username/password</h3>
+      <p>Create a set of HTTP auth credentials for an endpoint.</p>
+      <pre><code>CREATE CREDENTIALS ON "http://example.com/path" AUTH 'username:password'</code></pre>
+      <h3>Bearer token</h3>
+      <p>A "Bearer" token that will be provided through the Authentication header</p>
+      <pre><code>CREATE CREDENTIALS ON "http://example.com/path" TOKEN 'token'</code></pre>
+      <h3>Header</h3>
+      <p>A value that will be added as header</p>
+      <pre><code>CREATE CREDENTIALS ON "http://example.com/path" HEADER 'X-Header=value'</code></pre>
+      <h3>Query parameter</h3>
+      <p>A value that will be added as query parameter</p>
+      <pre><code>CREATE CREDENTIALS ON "http://example.com/path" PARAM 'name=value'</code></pre>
+      <h3>Naming credentials rules</h3>
+      <p>You can name rules:</p>
+      <pre><code>CREATE CREDENTIALS cred1 ON "http://example.com/path" TOKEN 'token'</code></pre>
+      <p>Then use the named rule:</p>
+      <pre><code>SELECT * FROM "http://cred1@example.com/path/to/rest/endpoint"</code></pre>
+      <h3>Removing a credentials rule</h3>
+      <pre><code>DROP CREDENTIALS ON "http://example.com/path"</code></pre>
+    </div>
+    <input type="radio" name="cheatsheet_tabs" role="tab" class="tab" aria-label="Pagination" />
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 prose max-w-none">
+      <p>Some HTTP APIs will return paginated data. You can define pagination rules for some URIs.</p>
+      <h3>Using headers</h3>
+      <p>
+        When the next page number is provided through HTTP headers:
+      </p>
+      <pre><code>CREATE PAGINATION ON "http://example.com/path" AS query_param = header(Header-Name)</code></pre>
+      <p>
+        `query_param` is the name of the query parameters that will be added to the next page request.
+      </p>
+      <h3>Using a value from the response</h3>
+      <p>
+        Use a JSON path expression to retrieve a value from the response:
+      </p>
+      <pre><code>CREATE PAGINATION ON "http://example.com/path" AS query_param = json(path.to.property)</code></pre>
+      <h3>Removing a pagination rule</h3>
+      <pre><code>DROP PAGINATION ON "http://example.com/path"</code></pre>
+    </div>
+    <input type="radio" name="cheatsheet_tabs" role="tab" class="tab" aria-label="Databases" />
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 prose max-w-none">
+      <p>You can query across your databases using the identifier located in the sidebar</p>
+      <pre><code>SELECT * FROM "22ea7f70-db1"."table1" db1_table1
+JOIN "83a03125-db2"."table1" db2_table1 ON db2_table1.col = db1_table1.col</code></pre>
+    </div>
+    <input type="radio" name="cheatsheet_tabs" role="tab" class="tab" aria-label="Limitations" />
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6 prose max-w-none">
+      <p>SQLETL is still in BETA and being actively developed. Some limitations apply.</p>
+      <ul>
+        <li>No sub-select</li>
+        <li>Multiple sources in FROM clause are not supported, use JOIN instead</li>
+        <li>JOIN ON clauses have limited capabilities</li>
+        <li>Use <code>CONCAT(a, b, ...)</code> in JOIN ON clauses to concatenate strings</li>
+        <li>No OR expressions in JOIN ON clauses</li>
+        <li>Aggregates and EXPAND/UNNEST functions are not supported together</li>
+      </ul>
+    </div>
+  </div>
+</{}>

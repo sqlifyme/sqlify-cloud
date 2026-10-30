@@ -1,0 +1,50 @@
+---
+from hyperflask import request, current_app
+from hyperflask_users import login_required, current_user
+from app.models import db, Database, NotebookQuery
+from app import sqlify
+import psycopg
+import uuid
+
+@login_required
+def post():
+    if not current_user.can_perform_queries:
+        return current_app.macros.UpgradeModal()
+
+    sqldb = Database.find_for_current_user_or_404(request.values.get('db'))
+    stmt = request.values['query'].strip()
+
+    if request.values.get("explain"):
+        stmt = "EXPLAIN " + stmt
+    if stmt.lower().startswith("explain"):
+        try:
+            results, columns = sqlify.query(stmt, sqldb.slug, current_user.db_role)
+            return current_app.macros.QueryExplainModal(query=stmt, plan=results[0][0])
+        except psycopg.DatabaseError as e:
+            return current_app.macros.QueryErrorModal(error=str(e))
+
+    return dict(db=sqldb.slug, stmt=stmt, query=None, trigger="load")
+
+@login_required
+def delete():
+    sqldb = Database.find_for_current_user_or_404(request.args.get('db'))
+    query = NotebookQuery.find_one_or_404(database_id=sqldb.id, id=int(request.args['qid']))
+    with db:
+      query.delete()
+    return ""
+
+def render(**props):
+    props["domid"] = "query" + str(uuid.uuid4()).split('-')[0]
+    return {"props": props}
+---
+{% if current_user.max_queries >= 0 %}<{HtmxOob}><{FreeQueryUsage}/></{}>{% endif %}
+<div id="{{props.domid}}" class="sqlquery rounded-md bg-base-100 shadow-lg mb-10 border border-neutral-300 dark:border-slate-900 dark:bg-[#282c34]">
+  <{QueryForm **props }/>
+  <div class="overflow-x-auto">
+    <div class="htmx-indicator p-3 text-neutral-500">
+      <{Loading}/>
+    </div>
+    <div class="results" {% if props.trigger == 'load' %}hx-post="{{url_for('QueryResults')}}" hx-indicator="closest .sqlquery" hx-include="#{{props.domid}} form" hx-trigger="load"{% endif %}></div>
+  </div>
+</div>
+{% if props.error %}{{props.error}}{% endif %}

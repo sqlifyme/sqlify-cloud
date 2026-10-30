@@ -1,0 +1,74 @@
+---
+from hyperflask import request
+from app.models import Database
+
+def get():
+  sqldb = Database.find_for_current_user_or_404(request.args['db'])
+  return {"db": sqldb}
+
+def render(db, **kwargs):
+    tables = {}
+    views = []
+    with db.connect() as cur:
+        for table in cur.execute("SHOW TABLES").fetchall():
+            tables[table[0]] = []
+            try:
+                for col in cur.execute(f'SHOW TABLE "{table[0]}"').fetchall():
+                    tables[table[0]].append(col[0])
+            except:
+                pass
+        for view in cur.execute("SHOW VIEWS").fetchall():
+            views.append(view[0])
+    return {"db": db, "tables": tables, "views": views}
+---
+<ul id="notebook-nav" class="flex-auto menu" x-data="{}">
+    <li><a @click="navigator.clipboard.writeText('{{db.slug}}')" title="Database name, click to copy"><{Icon "database"}/> {{db.slug}}</a></li>
+    {% if db.integration %}
+    <li><a><{Icon "plug"}/> {{config["INTEGRATIONS"][db.integration]["title"]}}</a></li>
+    {% endif %}
+    {% if tables %}
+    <li>
+        <details open>
+            <summary class="font-bold">Tables</summary>
+            <ul>
+                {% for table, cols in tables.items() %}
+                <li>
+                    <details>
+                        <summary><a @click="window.sqleditors['notebook-query']('SELECT * FROM &quot;{{table}}&quot;')">{{table}}</a></summary>
+                        <ul>
+                            {% for col in cols %}
+                            <li><span class="px-3 py-1">{{col}}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </details>
+                </li>
+                {% endfor %}
+            </ul>
+        </details>
+    </li>
+    {% endif %}
+    <li>
+        <details open>
+            <summary class="font-bold">Views</summary>
+            <ul>
+                {% for view in views %}
+                <li><a @click="window.sqleditors['notebook-query']('SELECT * FROM &quot;{{view}}&quot;')">{{view}}</a></li>
+                {% endfor %}
+                <li>
+                    <{button hf_modal=url_for('CreateViewModal', db=db.slug)}>
+                        <{Icon "plus" }/> New view
+                    </{}>
+                </li>
+            </ul>
+        </details>
+    </li>
+    <li class="grow bg-transparent"></li>
+    <!-- <li>
+        <{button hf_modal=url_for('ExploreModal')}>
+            <{Icon "signpost-2" }/> Explore APIs
+        </{}>
+    </li> -->
+    <li>
+        <a href="/docs" target="_blank"><{Icon "question-circle"}/> Help</a>
+    </li>
+</ul>

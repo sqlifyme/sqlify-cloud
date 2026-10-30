@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "bootstrap-icons": "^1.13.1",
+    "alpinejs": "^3.14.9",
+    "htmx.org": "^2.0.4",
+    "@codemirror/lang-sql": "^6.7.0",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "codemirror": "^6.0.1",
+    "datatables.net-dt": "^2.1.6",
+    "datatables.net-scroller-dt": "^2.4.3"
+  },
+  "devDependencies": {
+    "daisyui": "^5.0.35",
+    "esbuild": "^0.25.4",
+    "tailwindcss": "^4.1.6",
+    "@tailwindcss/cli": "^4.1.6",
+    "@tailwindcss/typography": "^0.5.16"
+  }
+}

@@ -1,0 +1,36 @@
+---
+from hyperflask import request, current_app
+from hyperflask_users import login_required, current_user
+from app.models import db, Database, NotebookQuery
+from app import sqlify
+import psycopg
+
+@login_required
+def post():
+    if not current_user.can_perform_queries:
+        return current_app.macros.UpgradeModal()
+
+    sqldb = Database.find_for_current_user_or_404(request.form['db'])
+    stmt = request.form['query'].strip()
+    with db:
+        current_user.incr_query_count()
+
+    try:
+        rows, columns = sqlify.query(stmt, sqldb.slug, current_user.db_role)
+    except psycopg.DatabaseError as e:
+        return current_app.macros.QueryErrorModal(error=str(e))
+
+    query = None
+    if "qid" in request.values and request.values["qid"] != "0":
+        query = NotebookQuery.find_one_or_404(database_id=sqldb.id, id=int(request.values['qid']))
+        with db:
+            query.stmt = stmt
+            query.save()
+    else:
+        with db:
+            query = NotebookQuery.create(database_id=sqldb.id, stmt=stmt)
+
+    return {"rows": rows, "columns": columns, "stmt": stmt, "db": sqldb.slug, "query": query, "domid": request.form['domid']}
+---
+<{HtmxOob target=("#"+props.domid+" form")}><{QueryForm **props }/></{}>
+<{ResultsTable columns=props.columns rows=props.rows }/>

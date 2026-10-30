@@ -1,0 +1,25 @@
+{
+  "name": "saas",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "forwardPorts": [5000, 7878, 8025],
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "pip install -r reqs.txt && poetry install && npm install",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+        "VisualStudioExptTeam.vscodeintellicode"
+      ],
+      "settings": {
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.testing.pytestEnabled": true
+			}
+    },
+    "remoteUser": "vscode"
+  }
+}

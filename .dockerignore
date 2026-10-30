@@ -1,0 +1,9 @@
+.editorconfig
+.github
+.gitignore
+.venv
+.git
+.devcontainer
+/database
+/deploy
+.env

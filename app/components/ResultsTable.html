@@ -1,0 +1,52 @@
+<div x-init="createDataTable($el)">
+  <table>
+    <thead>
+      <tr class="bg-base-300">
+        {% for column in props.columns %}
+          <th>{{column}}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+  </table>
+  <script type="application/json">
+    {{props.rows|tojson}}
+  </script>
+</div>
+
+<script bundle>
+  import DataTable from 'datatables.net-dt';
+  import 'datatables.net-dt/css/dataTables.dataTables.css';
+  import 'datatables.net-scroller-dt';
+  import 'datatables.net-scroller-dt/css/scroller.dataTables.css';
+
+  window.createDataTable = function(el) {
+    const data = JSON.parse(el.querySelector('script').textContent)
+    new DataTable(el.querySelector('table'), {
+      data,
+      scroller: true,
+      scrollCollapse: true,
+      scrollY: 500,
+      searching: false,
+      order: []
+    });
+  }
+</script>
+
+<style bundle>
+  html[data-theme="dark"] {
+    div.dts div.dt-scroll-body table,
+    div.dts div.dataTables_scrollBody table {
+      background-color: #282c34;
+    }
+  }
+  div.dt-container div.dt-layout-row {
+    margin: 0;
+  }
+  div.dt-container div.dt-layout-row:first-child {
+    display: none;
+  }
+  div.dt-container div.dt-layout-row:not(.dt-layout-table) .dt-layout-cell {
+    padding: .5rem;
+    font-size: .7rem;
+  }
+</style>

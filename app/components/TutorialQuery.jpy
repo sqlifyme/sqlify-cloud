@@ -1,0 +1,44 @@
+---
+from hyperflask import request, current_app
+from app import sqlify
+
+QUERIES = {
+    "step1.1": 'SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE "?codePostal" = 16200 AND population > 1000',
+    "step1.2": 'SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE ("?codePostal" = 16200 OR "?codePostal" = 16100) AND population > 1000 ORDER BY population DESC',
+    "step2.1": 'SELECT * FROM "https://api-adresse.data.gouv.fr/search#features" WHERE ?q = \'10 rue de penthievre 75008 paris\'',
+    "step2.2": 'SELECT expand(properties) FROM "https://api-adresse.data.gouv.fr/search#features" WHERE ?q = \'10 rue de penthievre 75008 paris\'',
+    "step2.3": 'SELECT unnest(records) FROM "https://data.education.gouv.fr/api/v2/catalog/datasets/fr-en-annuaire-education/records" WHERE "?where[]" = \'code_postal=75008\'',
+    "step3.1": 'SELECT co.nom, co.population FROM "https://api-adresse.data.gouv.fr/search#features" addr JOIN "https://geo.api.gouv.fr/communes" co ON co."?codePostal" = addr.properties->postcode WHERE addr."?q" = \'10 rue de penthievre 75008 paris\'',
+    "step3.2": 'WITH e1 AS (SELECT unnest(records) FROM "https://data.education.gouv.fr/api/v2/catalog/datasets/fr-en-annuaire-education/records" WHERE "?where[]" = \'code_postal=75008\'), e2 AS (SELECT expand(record) FROM e1) SELECT expand(fields) FROM e2'
+}
+
+def post():
+    stmt = QUERIES.get(request.values['query'])
+    if not stmt:
+        return {"query": "-- unknown statement", "results": [], "columns": []}
+
+    if request.values.get("explain"):
+      stmt = "EXPLAIN " + stmt
+
+    rows, columns = sqlify.query(stmt)
+
+    if request.values.get("explain"):
+        return current_app.macros.QueryExplainModal(query=stmt, plan=rows[0][0])
+
+    return {"query": request.values['query'], "rows": rows, "columns": columns}
+
+def render(query, rows=None, columns=None):
+    return {"QUERIES": QUERIES, "query": query, "rows": rows, "columns": columns}
+---
+<div class="tutorialquery bg-white rounded">
+    <{form class="flex items-center gap-2 p-2" hx_post=url_for("TutorialQuery") hx_target="closest .tutorialquery" hx_swap="outerHTML"}>
+        <input type="hidden" name="query" value="{{query}}">
+        <{SQLEditor class="flex-1"}>{{ QUERIES[query] }}</{}>
+        <{Button}><{Icon "run"}/> Run</{}>
+    </{}>
+    {% if columns %}
+    <div class="overflow-x-auto">
+        <{ResultsTable columns=columns rows=rows }/>
+    </div>
+    {% endif %}
+</div>

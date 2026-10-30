@@ -1,0 +1,14 @@
+{% extends "auth/layout.html" %}
+
+{% block auth_header %}
+  <h3 class="font-semibold text-2xl text-gray-800">Use ChatGPT in your database</h3>
+{% endblock %}
+
+{% block auth_content %}
+<{Form action=url_for('openai.setup') class="space-y-5"}>
+  <{FormField label="OpenAI API key"}>
+    <{Input name="apikey" required=True}/>
+  </{}>
+  <{Button type="submit" style="primary"}>Continue</{}>
+</{}>
+{% endblock %}

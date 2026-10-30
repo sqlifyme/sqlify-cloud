@@ -1,0 +1,28 @@
+---
+from hyperflask import request
+from hyperflask_users import current_user, login_required
+from app.models import db, Database
+
+def get():
+    pass
+
+---
+<{Modal close_btn=True large=True class="min-h-72" responsive=False}>
+    <div class="flex justify-between pe-7">
+        <{ModalTitle}>Explore APIs</{}>
+        <form class="flex align-items gap-2">
+            <{Input size="sm" name="q" placeholder="Search"}/>
+            <{Button type="submit"}><{Icon "search"}/></{}>
+        </form>
+    </div>
+    <div class="flex gap-6">
+        <div class="menu bg-base-200 rounded-box w-56">
+            <li><a>Category 1</a></li>
+            <li><a>Category 2</a></li>
+            <li><a>Category 3</a></li>
+        </div>
+        <div class="flex-1">
+            bla bla
+        </div>
+    </div>
+</{}>

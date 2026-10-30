@@ -1,0 +1,52 @@
+---
+from hyperflask import request, htmx_redirect
+from hyperflask_users import current_user, login_required
+from app.models import db, Database, UserOauthTokens
+
+@login_required
+def get():
+    pass
+
+@login_required
+def post():
+    with db:
+        current_user.email = request.form['email']
+        current_user.theme = request.form['theme']
+        current_user.save()
+    return htmx_redirect("/client")
+
+@login_required
+def delete():
+    with db:
+        token = UserOauthTokens.find_one_for_current_user_or_404(integration=request.values['token'])
+        token.delete()
+---
+<{Modal close_btn=True}>
+    <{ModalTitle}>Your account</{}>
+    <{ModalForm class="form-w-full"}>
+        <{FormField label="Email"}>
+            <{Input name="email" value=current_user.email required=True}/>
+        </{FormField}>
+        <{FormField label="Theme"}>
+            <{Select name="theme"}>
+                {% for theme, label in [("auto", "Auto"), ("light", "Light"), ("dark", "Dark")] %}
+                <option value="{{theme}}" {% if current_user.theme == theme %}selected{% endif %}>{{label}}</option>
+                {% endfor %}
+            </{}>
+        </{FormField}>
+        <{FormField label="Service Tokens"}>
+            <table class="table table-xs w-full">
+                {% for token in current_user.oauth_tokens %}
+                <tr>
+                    <td>{{token.integration|capitalize}}</td>
+                    <td class="text-right"><{Button hx_delete=url_for('AccountModal', token=token.integration) hx_target="closest tr" hx_swap="delete" class="btn-sm"}><{Icon "trash"}/></{}>
+                </tr>
+                {% endfor %}
+            </table>
+        </{}>
+        <div class="modal-action justify-between">
+            {% if current_user.stripe_customer_id %}<{LinkButton href=url_for('subscription')}>Manage billing</{LinkButton}>{% endif %}
+            <{Button type="submit"}>Save</{Button}>
+        </div>
+    </{}>
+</{}>

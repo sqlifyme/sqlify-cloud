@@ -1,0 +1,71 @@
+{
+  "app/components/ResultsTable.js": [
+    [
+      "/static/dist/app/components/ResultsTable-FRQOKTQA.js",
+      {
+        "modifier": "import"
+      }
+    ],
+    "/static/dist/app/components/ResultsTable-QVM7AXNK.css",
+    [
+      "/static/dist/chunk-HTVXZL3C.js",
+      {
+        "modifier": "modulepreload"
+      }
+    ]
+  ],
+  "app/components/SQLEditor.js": [
+    [
+      "/static/dist/app/components/SQLEditor-3IQ532EG.js",
+      {
+        "modifier": "import"
+      }
+    ],
+    [
+      "/static/dist/chunk-HTVXZL3C.js",
+      {
+        "modifier": "modulepreload"
+      }
+    ]
+  ],
+  "hyperflask:static/app.js": [
+    [
+      "/static/dist/app.js-JGKMJ3RN.js",
+      {
+        "modifier": "import"
+      }
+    ],
+    "/static/dist/app.js-6HFFAESN.css",
+    [
+      "/static/dist/chunk-HTVXZL3C.js",
+      {
+        "modifier": "modulepreload"
+      }
+    ]
+  ],
+  "hyperflask:static/reactive.js": [
+    [
+      "/static/dist/reactive.js-SF4VAFDH.js",
+      {
+        "modifier": "import"
+      }
+    ]
+  ],
+  "hyperflask:static/alpine.js": [
+    [
+      "/static/dist/alpine.js-XPX5FBMX.js",
+      {
+        "modifier": "import"
+      }
+    ],
+    [
+      "/static/dist/chunk-HTVXZL3C.js",
+      {
+        "modifier": "modulepreload"
+      }
+    ]
+  ],
+  "app/components/ResultsTable.css": [
+    "/static/dist/app/components/ResultsTable-IAK2BZZ7.css"
+  ]
+}

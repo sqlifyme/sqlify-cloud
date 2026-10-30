@@ -1,0 +1,26 @@
+---
+from hyperflask import request
+from app.models import Database
+
+def get():
+  sqldb = Database.find_for_current_user_or_404(request.args['db'])
+  return {"db": sqldb}
+---
+<{Modal close_btn=True}>
+    <{ModalTitle}>Connect using any PostgreSQL client</{}>
+    <{FormField label="Host"}>
+        <{Input value=config['SQLETL_DOMAIN'] readonly=True }/>
+    </{}>
+    <{FormField label="Port"}>
+        <{Input value="5432" readonly=True }/>
+    </{}>
+    <{FormField label="Username"}>
+        <{Input value=current_user.db_role readonly=True }/>
+    </{}>
+    <{FormField label="Password"}>
+        <{Input value=current_user.db_password readonly=True }/>
+    </{}>
+    <{FormField label="Database"}>
+        <{Input value=props.db.slug readonly=True }/>
+    </{}>
+</{}>

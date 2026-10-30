@@ -1,0 +1,18 @@
+{% extends "auth/layout.html" %}
+
+{% block auth_header %}
+  <h3 class="font-semibold text-2xl text-gray-800">Turn your Kantree workspaces into SQL databases</h3>
+{% endblock %}
+
+{% block auth_content %}
+<{Form action=url_for('kantree.setup') class="space-y-5"}>
+  <{FormField label="Organization"}>
+    <{Select name="org_id"}>
+      {% for org in orgs %}
+        <{option value=org.id}>{{org.name}}</{}>
+      {% endfor %}
+    </{Select}>
+  </{}>
+  <{Button type="submit" style="primary" onclick="this.disabled = true; this.parentElement.submit()"}>Continue</{}>
+</{}>
+{% endblock %}

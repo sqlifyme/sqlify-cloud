@@ -1,0 +1,27 @@
+{% extends "layouts/base.html" %}
+
+{% block html_tag_attrs %}{% if current_user.is_authenticated and current_user.theme == "dark" %}data-theme="dark"{% endif %}{% endblock %}
+
+{% block head_metas %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Turn all your apps into a single database with SQLify. Query any app or API in real-time using SQL, without synchronization or ETL pipelines. Compatible with PostgreSQL.">
+  <meta property="og:site_name" content="SQLify">
+  <meta property="og:image" content="{{static_url('images/social.png', _external=True)}}">
+{% endblock %}
+
+{% block page_title %}<title>SQLify - Query Any App or API as a Single Database</title>{% endblock %}
+
+{% block head_assets %}
+  <link rel="icon" href="{{static_url('icon.png')}}">
+  <script>
+    const userTheme = "{{current_user.theme if current_user.is_authenticated else 'auto'}}";
+    if (userTheme == "auto" && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark')
+    }
+  </script>
+{% endblock %}
+
+{% block body %}
+  {% block content %}{% endblock %}
+{% endblock %}

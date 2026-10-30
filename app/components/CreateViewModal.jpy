@@ -1,0 +1,43 @@
+---
+from hyperflask import request, redirect, abort, url_for, htmx_oob, current_app
+from hyperflask_users import current_user, login_required
+from app.models import db, Database
+from app import sqlify
+
+@login_required
+def get():
+    pass
+
+@login_required
+def post():
+    sqldb = Database.find_for_current_user_or_404(request.values.get('db'))
+    stmt = f"CREATE{' MATERIALIZED' if request.form.get('materialized') == '1' else ''} VIEW {request.form['name']} AS {request.form['stmt']}"
+
+    try:
+        sqlify.query(stmt, sqldb.slug, current_user.db_role)
+    except psycopg.DatabaseError as e:
+        return current_app.macros.QueryErrorModal(error=str(e))
+
+    return htmx_oob(current_app.macros.NotebookNav(db=sqldb))
+---
+<{Modal close_btn=True}>
+    <{ModalTitle}>Create new view</{}>
+    <p class="text-sm text-gray-500 mb-3">
+        Views (as in "SQL views") allows you to "save" a query under a name to easily re-use it
+    </p>
+    <{ModalForm class="form-w-full"}>
+        <{input type="hidden" name="db" value=request.args['db'] }/>
+        <{FormField label="Name"}>
+            <{Input name="name" required=True autofocus=True}/>
+        </{FormField}>
+        <{FormField label="SELECT statement"}>
+            <{Textarea name="stmt" required=True}></{}>
+        </{FormField}>
+        <{FormField}>
+            <{LabeledCheckbox name="materialized" value="1" }>Materialized (cached by SQLify)</{}>
+        </{FormField}>
+        <div class="modal-action">
+            <{Button type="submit"}>Create</{Button}>
+        </div>
+    </{}>
+</{}>

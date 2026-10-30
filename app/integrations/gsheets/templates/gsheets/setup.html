@@ -1,0 +1,15 @@
+{% extends "auth/layout.html" %}
+
+{% block auth_header %}
+  <h3 class="font-semibold text-2xl text-gray-800">Turn your Google Sheets into SQL databases</h3>
+{% endblock %}
+
+{% block auth_content %}
+<{Form action=url_for('gsheets.setup') class="space-y-5"}>
+  <{FormField label="Google Sheet ID or URL"}>
+    <{Input name="sheet_id" placeholder="1a2b3c4d5e6f7g8h9i0j" required=True}/>
+    <{LabeledCheckbox label="Use first row as column names" name="colnames" value="1" checked=True}/>
+  </{}>
+  <{Button type="submit" style="primary" onclick="this.disabled = true; this.parentElement.submit()"}>Continue</{}>
+</{}>
+{% endblock %}

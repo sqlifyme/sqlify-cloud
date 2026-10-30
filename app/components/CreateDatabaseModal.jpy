@@ -1,0 +1,29 @@
+---
+from hyperflask import request, redirect, abort, url_for, htmx_redirect, current_app
+from hyperflask_users import current_user, login_required
+from app.models import db, Database
+
+@login_required
+def get():
+    if not current_user.can_create_database:
+        return current_app.macros.UpgradeModal()
+
+@login_required
+def post():
+    if not current_user.can_create_database:
+        abort(403)
+    with db:
+        sqldb = Database.create(current_user, request.form['name'])
+    return htmx_redirect(url_for('client', db=sqldb.slug))
+---
+<{Modal close_btn=True}>
+    <{ModalTitle}>Create new database</{}>
+    <{ModalForm class="form-w-full"}>
+        <{FormField label="Name"}>
+            <{Input name="name" required=True autofocus=True}/>
+        </{FormField}>
+        <div class="modal-action">
+            <{Button type="submit"}>Create</{Button}>
+        </div>
+    </{}>
+</{}>
