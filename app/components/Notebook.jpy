@@ -45,13 +45,13 @@ def render(db):
             <!-- <{Link class="text-gray-400" hf_modal=url_for('ExploreModal')}><{Icon "signpost-2" }/> Explore APIs</{}> -->
             <{Link hf_modal=url_for('CheatsheetModal') class="text-gray-400" }><{Icon "question-circle" }/> SQLETL cheatsheet</{}>
             <{Link hf_modal=url_for('ExamplesModal') class="text-gray-400" }><{Icon "magic" }/> SQLETL examples</{}>
-            <{Link hx_post=url_for("Query", explain=1) hx_target="#queries" hx_swap="afterbegin" hx_disabled_elt="this" class="text-gray-400" }><{Icon "gear-wide-connected" }/> Explain query</{}>
+            <{Link hx_post=url_for("Query", explain=1) hx_target="#queries" hx_swap="afterbegin" hx_disable="this" class="text-gray-400" }><{Icon "gear-wide-connected" }/> Explain query</{}>
             {% if db.integration and config["INTEGRATIONS"][db.integration].get("help_url") %}
             <{Link hf_modal=config["INTEGRATIONS"][db.integration]['help_url'] class="text-gray-400" }><{Icon "question-circle" }/> {{config["INTEGRATIONS"][db.integration]['title']}} integration help</{}>
             {% endif %}
           </div>
         </div>
-        <{Button type="submit" class="btn-neutral px-10 h-full" hx_post=url_for("Query") hx_target="#queries" hx_swap="afterbegin" hx_disabled_elt="this"}><{Icon "play"}/> Run</{Button}>
+        <{Button type="submit" class="btn-neutral px-10 h-full" hx_post=url_for("Query") hx_target="#queries" hx_swap="afterbegin" hx_disable="this"}><{Icon "play"}/> Run</{Button}>
       </{}>
     </div>
     <div class="overflow-y-auto overflow-x-hidden p-5">

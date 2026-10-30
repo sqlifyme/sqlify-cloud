@@ -4,7 +4,7 @@
   <{input type="hidden" name="qid" value=(props.query.id if props.query else 0) }/>
   <{SQLEditor name="query" class="flex-1 rounded-tl-md"}>{{props.stmt}}</{}>
   <div class="grid grid-cols-2 gap-2">
-    <{Button hx_post=url_for('QueryResults') hx_target=("#"+props.domid+" .results") hx_disabled_elt="this"
+    <{Button hx_post=url_for('QueryResults') hx_target=("#"+props.domid+" .results") hx_disable="this"
       hx_indicator="closest .sqlquery" title="Execute" disabled=(not current_user.can_perform_queries) class="btn-sm"}>
         <{Icon ("arrow-clockwise" if props.get('columns') else "play") class="htmx-indicator-hidden" }/>
         <{Loading class="htmx-indicator loading-xs" }/>
@@ -17,6 +17,6 @@
       class="btn-sm" title="Export to CSV" disabled=(not current_user.can_perform_queries or not props.query)}><{Icon "download" }/></{}>
 
     <{Button class="btn-sm" hx_delete=(url_for('Query', db=props.db, qid=props.query.id) if props.query else None)
-        hx_params="none" hx_target="closest .sqlquery" hx_swap="delete" title="Delete" disabled=(not props.query)}><{Icon "trash" }/></{}>
+        hx_target="closest .sqlquery" hx_swap="delete" title="Delete" disabled=(not props.query)}><{Icon "trash" }/></{}>
   </div>
 </form>

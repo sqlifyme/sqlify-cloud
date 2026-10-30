@@ -27,7 +27,7 @@ page.integrations = Database.find_all_for_current_user(Database.integration!=Non
                     <ul>
                         {% for db in databases %}
                         <li>
-                            <{button hx_get=url_for('Notebook', db=db.slug) hx_target="#notebook" hx_disabled_elt="#sidebar button" hx_push_url=url_for('client', db=db.slug)}>
+                            <{button hx_get=url_for('Notebook', db=db.slug) hx_target="#notebook" hx_disable="#sidebar button" hx_push_url=url_for('client', db=db.slug)}>
                                 <{Icon "database"}/> {{db.name}}
                             </{}>
                         </li>
@@ -44,7 +44,7 @@ page.integrations = Database.find_all_for_current_user(Database.integration!=Non
                     <ul>
                         {% for db in integrations %}
                         <li>
-                            <{button hx_get=url_for('Notebook', db=db.slug) hx_target="#notebook" hx_disabled_elt="#sidebar button" hx_push_url=url_for('client', db=db.slug) title=db.name}>
+                            <{button hx_get=url_for('Notebook', db=db.slug) hx_target="#notebook" hx_disable="#sidebar button" hx_push_url=url_for('client', db=db.slug) title=db.name}>
                                 <span class="overflow-hidden text-nowrap">
                                     <img src="{{static_url(config["INTEGRATIONS"][db.integration]["icon"])}}" alt="{{config["INTEGRATIONS"][db.integration]["title"]}}" width=20 height=20 class="rounded me-1 inline">
                                     {{db.name}}

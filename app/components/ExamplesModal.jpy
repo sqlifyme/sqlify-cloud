@@ -6,7 +6,7 @@ def get():
     {% set inner = caller() %}
     <form class="flex items-center gap-2 p-2 rounded shadow-sm my-4 border border-gray-300">
         <{SQLEditor name="query" class="flex-1"}>{{inner}}</{}>
-        <{Button hx_post=url_for("Query", noexec=1) hx_target="#queries" hx_swap="afterbegin" hx_disabled_elt="this" hx_on__after_request="this.closest('dialog').close()"}><{Icon "play"}/> Run</{Button}>
+        <{Button hx_post=url_for("Query", noexec=1) hx_target="#queries" hx_swap="afterbegin" hx_disable="this" hx_on="htmx:after:request -> this.closest('dialog').close()"}><{Icon "play"}/> Run</{Button}>
     </form>
 {% endmacro %}
 <{Modal close_btn=True width="w-11/12 max-w-6xl" responsive=False}>
