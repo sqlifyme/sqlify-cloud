@@ -59,13 +59,13 @@
       </aside>
       <div class="flex-auto flex flex-col overflow-hidden">
         <div class="flex justify-center p-3 gap-2 h-32 border-b border-neutral-300 bg-white dark:bg-[#282c34]">
-          <{SQLEditor name="query" class="flex-1"}>SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE "?codePostal" = 75001</{}>
+          <{sql_editor name="query" class="flex-1"}>SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE "?codePostal" = 75001</{}>
           <{Button class="h-full px-10" style="neutral"}><{Icon "play"}/> Run</{Button}>
         </div>
         <div id="queries" class="overflow-y-auto p-5">
           <div class="sqlquery rounded-md bg-base-100 shadow-lg mb-10 pb-2 border border-neutral-300 dark:border-slate-900 dark:bg-[#282c34]">
             <div class="flex items-center">
-              <{SQLEditor name="query" class="flex-1 rounded-tl-md"}>SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE "?codePostal" = 75001</{}>
+              <{sql_editor name="query" class="flex-1 rounded-tl-md"}>SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE "?codePostal" = 75001</{}>
               <div class="flex flex-col gap-2 p-1">
                 <{Button size="sm" title="Execute"}><{Icon "arrow-clockwise" }/></{}>
                 <{Button size="sm" title="Explain"}><{Icon "question-circle-fill" }/></{}>

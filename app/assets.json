@@ -14,20 +14,6 @@
       }
     ]
   ],
-  "app/components/SQLEditor.js": [
-    [
-      "/static/dist/app/components/SQLEditor-CS226LXE.js",
-      {
-        "modifier": "import"
-      }
-    ],
-    [
-      "/static/dist/chunk-HTVXZL3C.js",
-      {
-        "modifier": "modulepreload"
-      }
-    ]
-  ],
   "hyperflask:static/app.js": [
     [
       "/static/dist/app.js-RAV74GXZ.js",
@@ -46,6 +32,20 @@
   "hyperflask:static/alpine.js": [
     [
       "/static/dist/alpine.js-MYQLPPGC.js",
+      {
+        "modifier": "import"
+      }
+    ],
+    [
+      "/static/dist/chunk-HTVXZL3C.js",
+      {
+        "modifier": "modulepreload"
+      }
+    ]
+  ],
+  "/home/maxime/Digicoop/sqlify/sqlify-cloud/app/components/sql_editor.js": [
+    [
+      "/static/dist/app/components/sql_editor.js-SJXDUULJ.js",
       {
         "modifier": "import"
       }

@@ -33,7 +33,7 @@ def render(query, rows=None, columns=None):
 <div class="tutorialquery bg-white rounded">
     <{form class="flex items-center gap-2 p-2" hx_post=url_for("TutorialQuery") hx_target="closest .tutorialquery" hx_swap="outerHTML"}>
         <input type="hidden" name="query" value="{{query}}">
-        <{SQLEditor class="flex-1"}>{{ QUERIES[query] }}</{}>
+        <{sql_editor class="flex-1"}>{{ QUERIES[query] }}</{}>
         <{Button}><{Icon "run"}/> Run</{}>
     </{}>
     {% if columns %}

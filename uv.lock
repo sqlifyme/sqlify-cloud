@@ -970,7 +970,7 @@ wheels = [
 
 [[package]]
 name = "hyperflask"
-version = "0.7.1"
+version = "0.7.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dramatiq" },
@@ -1002,9 +1002,9 @@ dependencies = [
     { name = "python-slugify" },
     { name = "watchdog" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b4/b5/f8601dc8885884daff432a613b003446436688642a9b6a53219fd0e8db6e/hyperflask-0.7.1.tar.gz", hash = "sha256:9057416231582eb1b7d8007cff2ee326c8bfcd63c6877a1f2666204a66f175c0", size = 41122, upload-time = "2026-10-30T16:14:26.88Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ad/5a/030781de34bab1362bfd9b04227581d5e18f62a62514e6a5a80cadc5713d/hyperflask-0.7.2.tar.gz", hash = "sha256:fed2935bdf7ad3ef23c0ca93b1d57dd8b8810c201e89f43d76c3f1a7e1383ed4", size = 41188, upload-time = "2026-10-30T18:11:52.123Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/77/a9/01e538ed39f436ba78f77303c303392bb91b0c23d8dd587d43845a4080bb/hyperflask-0.7.1-py3-none-any.whl", hash = "sha256:8cb3e082cbd92e8f02f3d45b596280ec6fa19dd490e578e3e733ff6efa80dc34", size = 78082, upload-time = "2026-10-30T16:14:25.333Z" },
+    { url = "https://files.pythonhosted.org/packages/d7/53/141c2ce9f43d80d5741b36e846898650d427a80dfe01a3f352f35eb01d50/hyperflask-0.7.2-py3-none-any.whl", hash = "sha256:7d524fcba33904a9aa6497e469855196d1750cd319bbab1fab1ec75598f873cb", size = 78114, upload-time = "2026-10-30T18:11:50.786Z" },
 ]
 
 [[package]]
@@ -2263,7 +2263,7 @@ requires-dist = [
     { name = "authlib", specifier = "~=1.3" },
     { name = "brevo-python", specifier = "~=1.1" },
     { name = "flask-stripe-checkout", specifier = "~=0.1" },
-    { name = "hyperflask", specifier = "~=0.7" },
+    { name = "hyperflask", specifier = "~=0.7.2" },
     { name = "hyperflask-users", specifier = "~=0.3.2" },
     { name = "psycopg", extras = ["binary"], specifier = "~=3.2" },
     { name = "pycryptodome", specifier = ">=3.23.0" },

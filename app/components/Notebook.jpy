@@ -40,7 +40,7 @@ def render(db):
       <{form class="flex justify-center gap-2 h-24"}>
         <input type="hidden" name="db" value="{{db.slug}}">
         <div class="flex-1 flex flex-col">
-          <{SQLEditor id="notebook-query" name="query" class="flex-1"}>{% if not queries %}{% if db.suggestion %}{{db.suggestion}}{% else %}SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE "?codePostal" = 75001{% endif %}{% endif %}</{}>
+          <{sql_editor id="notebook-query" name="query" class="flex-1"}>{% if not queries %}{% if db.suggestion %}{{db.suggestion}}{% else %}SELECT nom, population FROM "https://geo.api.gouv.fr/communes" WHERE "?codePostal" = 75001{% endif %}{% endif %}</{}>
           <div class="flex gap-5 px-1 text-sm mt-3">
             <!-- <{Link class="text-gray-400" hf_modal=url_for('ExploreModal')}><{Icon "signpost-2" }/> Explore APIs</{}> -->
             <{Link hf_modal=url_for('CheatsheetModal') class="text-gray-400" }><{Icon "question-circle" }/> SQLETL cheatsheet</{}>

@@ -34,7 +34,7 @@ def render(db, **kwargs):
                 {% for table, cols in tables.items() %}
                 <li>
                     <details>
-                        <summary><a @click="window.sqleditors['notebook-query']('SELECT * FROM &quot;{{table}}&quot;')">{{table}}</a></summary>
+                        <summary><a @click="document.getElementById('notebook-query').value = 'SELECT * FROM &quot;{{table}}&quot;'">{{table}}</a></summary>
                         <ul>
                             {% for col in cols %}
                             <li><span class="px-3 py-1">{{col}}</span></li>
@@ -52,7 +52,7 @@ def render(db, **kwargs):
             <summary class="font-bold">Views</summary>
             <ul>
                 {% for view in views %}
-                <li><a @click="window.sqleditors['notebook-query']('SELECT * FROM &quot;{{view}}&quot;')">{{view}}</a></li>
+                <li><a @click="document.getElementById('notebook-query').value = 'SELECT * FROM &quot;{{view}}&quot;'">{{view}}</a></li>
                 {% endfor %}
                 <li>
                     <{button hf_modal=url_for('CreateViewModal', db=db.slug)}>

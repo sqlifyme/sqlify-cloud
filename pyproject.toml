@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "hyperflask~=0.7",
+    "hyperflask~=0.7.2",
     "hyperflask-users~=0.3.2",
     "flask-stripe-checkout~=0.1",
     "psycopg[binary]~=3.2",

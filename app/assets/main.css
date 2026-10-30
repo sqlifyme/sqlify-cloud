@@ -9,3 +9,10 @@
     width: 100%;
   }
 }
+
+@layer components {
+  sql-editor {
+    display: block;
+    align-self: stretch;
+  }
+}

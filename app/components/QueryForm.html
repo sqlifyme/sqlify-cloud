@@ -2,7 +2,7 @@
   <{input type="hidden" name="db" value=props.db}/>
   <{input type="hidden" name="domid" value=props.domid}/>
   <{input type="hidden" name="qid" value=(props.query.id if props.query else 0) }/>
-  <{SQLEditor name="query" class="flex-1 rounded-tl-md"}>{{props.stmt}}</{}>
+  <{sql_editor name="query" class="flex-1 rounded-tl-md"}>{{props.stmt}}</{}>
   <div class="grid grid-cols-2 gap-2">
     <{Button hx_post=url_for('QueryResults') hx_target=("#"+props.domid+" .results") hx_disable="this"
       hx_indicator="closest .sqlquery" title="Execute" disabled=(not current_user.can_perform_queries) class="btn-sm"}>
